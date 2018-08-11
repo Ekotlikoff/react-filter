@@ -1,9 +1,4 @@
 import React, {Component} from 'react'
+import Filter from './Filter';
 
-export default class extends Component {
-  render() {
-    return <div>
-      <h2>Welcome to React components</h2>
-    </div>
-  }
-}
+export { Filter };
