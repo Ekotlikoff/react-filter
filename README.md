@@ -4,7 +4,7 @@
 [![npm package][npm-badge]][npm]
 [![Coveralls][coveralls-badge]][coveralls]
 
-Describe react-filter here.
+React component to facilitate the creation of a query across a dataset
 
 [build-badge]: https://travis-ci.org/Ekotlikoff/react-filter.svg?branch=master
 [build]: https://travis-ci.org/Ekotlikoff/react-filter
