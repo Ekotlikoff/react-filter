@@ -20,15 +20,19 @@
     "test:watch": "nwb test-react --server"
   },
   "dependencies": {
+    "lodash.isempty": "^4.4.0",
     "react-select": "^2.0.0"
   },
   "peerDependencies": {
     "react": "16.x"
   },
   "devDependencies": {
+    "enzyme": "^3.4.1",
+    "enzyme-adapter-react-16": "^1.2.0",
     "nwb": "0.23.x",
     "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "react-dom": "^16.4.2",
+    "sinon": "^6.1.5"
   },
   "author": "",
   "homepage": "",
