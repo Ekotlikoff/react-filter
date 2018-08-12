@@ -12,5 +12,5 @@ React component to facilitate the creation of a query across a dataset
 [npm-badge]: https://img.shields.io/npm/v/npm-package.png?style=flat-square
 [npm]: https://www.npmjs.org/package/npm-package
 
-[coveralls-badge]: https://img.shields.io/coveralls/user/repo/master.png?style=flat-square
-[coveralls]: https://coveralls.io/github/user/repo
+[coveralls-badge]: https://coveralls.io/repos/github/Ekotlikoff/react-filter/badge.svg?branch=master
+[coveralls]: https://coveralls.io/github/Ekotlikoff/react-filter?branch=master
