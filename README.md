@@ -6,7 +6,7 @@
 
 Describe react-filter here.
 
-[build-badge]: https://travis-ci.org/Ekotlikoff/react-filter/master.png?style=flat-square
+[build-badge]: https://travis-ci.org/Ekotlikoff/react-filter.svg?branch=master
 [build]: https://travis-ci.org/Ekotlikoff/react-filter
 
 [npm-badge]: https://img.shields.io/npm/v/npm-package.png?style=flat-square
