@@ -5,20 +5,20 @@ module.exports = {
     umd: {
       global: 'ReactFilter',
       externals: {
-        react: 'React'
-      }
-    }
+        react: 'React',
+      },
+    },
   },
   karma: {
-    testContext: 'tests.webpack.js'
+    testContext: 'tests.webpack.js',
   },
   webpack: {
     rules: {
       svg: {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "eslint-loader"
-      }
-    }
-  }
-}
+        loader: 'eslint-loader',
+      },
+    },
+  },
+};
