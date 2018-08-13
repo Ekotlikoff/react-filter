@@ -1,7 +1,8 @@
-import React, {Component} from 'react'
-import {render} from 'react-dom'
+/* eslint-env browser */
+import React, { Component } from 'react';
+import { render } from 'react-dom'; // eslint-disable-line import/no-extraneous-dependencies
 
-import { Filter } from '../../src'
+import Filter from '../../src';
 
 class Demo extends Component {
   constructor(props) {
@@ -18,15 +19,19 @@ class Demo extends Component {
   render() {
     const availableFilters = { name: { type: 'select', options: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }] } };
 
-    return <div>
-      <h1>react-filter Demo</h1>
-      <Filter
-        availableFilters={availableFilters}
-        selectedFilters={this.state.selectedFilters}
-        onChange={this.onChange}
-      />
-    </div>
+    return (
+      <div>
+        <h1>
+          react-filter Demo
+        </h1>
+        <Filter
+          availableFilters={availableFilters}
+          selectedFilters={this.state.selectedFilters}
+          onChange={this.onChange}
+        />
+      </div>
+    );
   }
 }
 
-render(<Demo />, document.querySelector('#demo'))
+render(<Demo />, document.querySelector('#demo'));

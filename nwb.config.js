@@ -11,5 +11,14 @@ module.exports = {
   },
   karma: {
     testContext: 'tests.webpack.js'
+  },
+  webpack: {
+    rules: {
+      svg: {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "eslint-loader"
+      }
+    }
   }
 }
