@@ -32,6 +32,6 @@ describe('Filter', () => {
       onChange={spy}
     />);
     filter.instance().onAddFilter({ value: 'name' });
-    expect(spy).toHaveBeenCalledWith({ name: { selectedOptions: [] }});
+    expect(spy).toHaveBeenCalledWith({ name: { selectedOptions: [] } });
   });
 });
