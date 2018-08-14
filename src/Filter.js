@@ -5,6 +5,10 @@ import isEmpty from 'lodash.isempty';
 import * as constants from './constants';
 
 export default class Filter extends Component {
+  static newSelectedFilter(filterName) {
+    return { name: filterName, selectedOptions: [] };
+  }
+
   constructor(props) {
     super(props);
 
@@ -13,45 +17,66 @@ export default class Filter extends Component {
     this.renderSelectedFilter = this.renderSelectedFilter.bind(this);
     this.renderFilterTypeSelect = this.renderFilterTypeSelect.bind(this);
     this.getUnselectedFilters = this.getUnselectedFilters.bind(this);
-    this.onAddFilter = this.onAddFilter.bind(this);
+    this.getSelectedFilters = this.getSelectedFilters.bind(this);
+    this.onRootChange = this.onRootChange.bind(this);
+    this.onChildChange = this.onChildChange.bind(this);
   }
 
-  onAddFilter(addedFilter) {
-    if (addedFilter) {
-      this.props.onChange({
-        ...this.props.selectedFilters,
-        [addedFilter.value]: { selectedOptions: [] },
-      });
-    }
+  onRootChange(allNewSelectedFilters) {
+    const { selectedFilters, onChange } = this.props;
+    const allNewSelectedFilterNames = allNewSelectedFilters.map(filter => filter.value);
+    const newSelectedFilterNames = allNewSelectedFilterNames
+      .filter(name => !selectedFilters.some(filter => filter.name === name));
+    const prevSelectedFilters = selectedFilters
+      .filter(filter => allNewSelectedFilterNames.includes(filter.name));
+    onChange(
+      [
+        ...prevSelectedFilters,
+        ...newSelectedFilterNames.map(name => Filter.newSelectedFilter(name)),
+      ],
+    );
   }
 
-  getSelectedFilters() {
-    if (!isEmpty(this.props.selectedFilters)) {
-      return Object.keys(this.props.selectedFilters)
-        .map(filterName => ({ value: filterName, label: filterName }));
-    }
-    return [];
+  onChildChange(selectedFilter, selectedOptions) {
+    const { selectedFilters } = this.props;
+    const selectedFilterIndex = selectedFilters
+      .findIndex(filter => filter.name === selectedFilter.name);
+    this.props.onChange(
+      Object.assign(
+        [...selectedFilters],
+        { [selectedFilterIndex]: { ...selectedFilters[selectedFilterIndex], selectedOptions } },
+      ),
+    );
   }
 
   getUnselectedFilters() {
     if (!isEmpty(this.props.availableFilters)) {
-      return Object.keys(this.props.availableFilters)
+      return this.props.availableFilters.map(filter => filter.name)
         .filter(this.isFilterUnselected)
         .map(filterName => ({ value: filterName, label: filterName }));
     }
     return [];
   }
 
-  isFilterUnselected(filterName) {
-    return isEmpty(this.props.selectedFilters)
-      || !Object.prototype.hasOwnProperty.call(this.props.selectedFilters, filterName);
+  getSelectedFilters() {
+    if (!isEmpty(this.props.selectedFilters)) {
+      return this.props.selectedFilters.map(({ name }) => ({ value: name, label: name }));
+    }
+    return [];
   }
 
-  renderFilterTypeSelect(selectedFilterName) {
+  isFilterUnselected(filterName) {
+    return isEmpty(this.props.selectedFilters)
+      || !this.props.selectedFilters.includes(filterName);
+  }
+
+  renderFilterTypeSelect(availableFilter, selectedFilter) {
     return (
       <ReactSelect
-        options={this.props.availableFilters[selectedFilterName].options}
-        value={this.props.selectedFilters[selectedFilterName].selectedOptions}
+        options={availableFilter.options}
+        value={selectedFilter.selectedOptions}
+        onChange={newOption => this.onChildChange(selectedFilter, newOption)}
+        isMulti
       />
     );
   }
@@ -62,20 +87,21 @@ export default class Filter extends Component {
     }
     return (
       <div>
-        {Object.keys(this.props.selectedFilters).map(selectedFilterName => (
-          <div key={selectedFilterName} id={selectedFilterName}>
-            {this.renderSelectedFilter(selectedFilterName)}
+        {this.props.selectedFilters.map(selectedFilter => (
+          <div key={selectedFilter.name} id={selectedFilter.name}>
+            {this.renderSelectedFilter(selectedFilter)}
           </div>
         ))}
       </div>
     );
   }
 
-  renderSelectedFilter(selectedFilterName) {
-    const availableFilter = this.props.availableFilters[selectedFilterName];
+  renderSelectedFilter(selectedFilter) {
+    const availableFilter = this.props.availableFilters
+      .find(filter => filter.name === selectedFilter.name);
     switch (availableFilter.type) {
       case (constants.FILTER_TYPES.SELECT):
-        return this.renderFilterTypeSelect(selectedFilterName);
+        return this.renderFilterTypeSelect(availableFilter, selectedFilter);
       default:
         throw new Error(`Filter.js: Unrecognized filter type: \`${availableFilter.type}\`.`);
     }
@@ -87,7 +113,9 @@ export default class Filter extends Component {
         <ReactSelect
           options={this.getUnselectedFilters()}
           value={this.getSelectedFilters()}
-          onChange={this.onAddFilter}
+          onChange={this.onRootChange}
+          hideSelectedOptions
+          isMulti
         />
         {this.renderSelectedFilters()}
       </div>
@@ -96,8 +124,9 @@ export default class Filter extends Component {
 }
 
 Filter.propTypes = {
-  availableFilters: PropTypes.objectOf(
+  availableFilters: PropTypes.arrayOf(
     PropTypes.shape({
+      name: PropTypes.string,
       type: PropTypes.oneOf(Object.values(constants.FILTER_TYPES)),
       options: PropTypes.arrayOf(
         PropTypes.shape({
@@ -108,8 +137,9 @@ Filter.propTypes = {
       selectIsMulti: PropTypes.bool,
     }),
   ).isRequired,
-  selectedFilters: PropTypes.objectOf(
+  selectedFilters: PropTypes.arrayOf(
     PropTypes.shape({
+      name: PropTypes.string,
       selectedOptions: PropTypes.arrayOf(
         PropTypes.shape({
           value: PropTypes.string,

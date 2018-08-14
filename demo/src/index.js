@@ -7,7 +7,7 @@ import Filter from '../../src';
 class Demo extends Component {
   constructor(props) {
     super(props);
-    this.state = { selectedFilters: {} };
+    this.state = { selectedFilters: [] };
 
     this.onChange = this.onChange.bind(this);
   }
@@ -17,7 +17,7 @@ class Demo extends Component {
   }
 
   render() {
-    const availableFilters = { name: { type: 'select', options: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }] } };
+    const availableFilters = [{ name: 'name', type: 'select', options: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }] }];
 
     return (
       <div>
