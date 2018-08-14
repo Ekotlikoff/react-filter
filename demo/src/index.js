@@ -18,6 +18,7 @@ class Demo extends Component {
 
   render() {
     const availableFilters = [{ name: 'name', type: 'select', options: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }] }];
+    const { selectedFilters } = this.state;
 
     return (
       <div>
@@ -26,7 +27,7 @@ class Demo extends Component {
         </h1>
         <Filter
           availableFilters={availableFilters}
-          selectedFilters={this.state.selectedFilters}
+          selectedFilters={selectedFilters}
           onChange={this.onChange}
         />
       </div>

@@ -38,10 +38,10 @@ export default class Filter extends Component {
   }
 
   onChildChange(selectedFilter, selectedOptions) {
-    const { selectedFilters } = this.props;
+    const { selectedFilters, onChange } = this.props;
     const selectedFilterIndex = selectedFilters
       .findIndex(filter => filter.name === selectedFilter.name);
-    this.props.onChange(
+    onChange(
       Object.assign(
         [...selectedFilters],
         { [selectedFilterIndex]: { ...selectedFilters[selectedFilterIndex], selectedOptions } },
@@ -50,8 +50,9 @@ export default class Filter extends Component {
   }
 
   getUnselectedFilters() {
-    if (!isEmpty(this.props.availableFilters)) {
-      return this.props.availableFilters.map(filter => filter.name)
+    const { availableFilters } = this.props;
+    if (!isEmpty(availableFilters)) {
+      return availableFilters.map(filter => filter.name)
         .filter(this.isFilterUnselected)
         .map(filterName => ({ value: filterName, label: filterName }));
     }
@@ -59,15 +60,17 @@ export default class Filter extends Component {
   }
 
   getSelectedFilters() {
-    if (!isEmpty(this.props.selectedFilters)) {
-      return this.props.selectedFilters.map(({ name }) => ({ value: name, label: name }));
+    const { selectedFilters } = this.props;
+    if (!isEmpty(selectedFilters)) {
+      return selectedFilters.map(({ name }) => ({ value: name, label: name }));
     }
     return [];
   }
 
   isFilterUnselected(filterName) {
-    return isEmpty(this.props.selectedFilters)
-      || !this.props.selectedFilters.includes(filterName);
+    const { selectedFilters } = this.props;
+    return isEmpty(selectedFilters)
+      || !selectedFilters.includes(filterName);
   }
 
   renderFilterTypeSelect(availableFilter, selectedFilter) {
@@ -82,12 +85,13 @@ export default class Filter extends Component {
   }
 
   renderSelectedFilters() {
-    if (isEmpty(this.props.selectedFilters)) {
+    const { selectedFilters } = this.props;
+    if (isEmpty(selectedFilters)) {
       return null;
     }
     return (
       <div>
-        {this.props.selectedFilters.map(selectedFilter => (
+        {selectedFilters.map(selectedFilter => (
           <div key={selectedFilter.name} id={selectedFilter.name}>
             {this.renderSelectedFilter(selectedFilter)}
           </div>
@@ -97,7 +101,8 @@ export default class Filter extends Component {
   }
 
   renderSelectedFilter(selectedFilter) {
-    const availableFilter = this.props.availableFilters
+    const { availableFilters } = this.props;
+    const availableFilter = availableFilters
       .find(filter => filter.name === selectedFilter.name);
     switch (availableFilter.type) {
       case (constants.FILTER_TYPES.SELECT):
