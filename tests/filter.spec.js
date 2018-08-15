@@ -4,6 +4,7 @@ import { renderToStaticMarkup as render } from 'react-dom/server';
 import { shallow } from 'enzyme';
 
 import Filter from '../src/Filter';
+import Select from '../src/filterTypes/Select';
 
 describe('Filter', () => {
   it('can render without props', () => {
@@ -64,7 +65,10 @@ describe('Filter', () => {
         selectedFilters={[{ name: 'name', selectedOptions: [{ value: 'Emmett', label: 'Emmett' }] }, { name: 'age', selectedOptions: [] }, { name: 'gender', selectedOptions: [] }]}
         onChange={spy}
       />);
-      filter.instance().onChildChange({ name: 'name', selectedOptions: [{ value: 'Emmett', label: 'Emmett' }] }, [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }]);
+      filter.find('#name').find(Select).simulate(
+        'change',
+        [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }],
+      );
       expect(spy).toHaveBeenCalledWith([
         { name: 'name', selectedOptions: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }] },
         { name: 'age', selectedOptions: [] },
@@ -83,7 +87,10 @@ describe('Filter', () => {
         selectedFilters={[{ name: 'name', selectedOptions: [{ value: 'Emmett', label: 'Emmett' }] }, { name: 'age', selectedOptions: [{ value: 'twenty four', label: 'twenty four' }] }, { name: 'gender', selectedOptions: [] }]}
         onChange={spy}
       />);
-      filter.instance().onChildChange({ name: 'name', selectedOptions: [{ value: 'Emmett', label: 'Emmett' }] }, [{ value: 'Jacob', label: 'Jacob' }]);
+      filter.find('#name').find(Select).simulate(
+        'change',
+        [{ value: 'Jacob', label: 'Jacob' }],
+      );
       expect(spy).toHaveBeenCalledWith([
         { name: 'name', selectedOptions: [{ value: 'Jacob', label: 'Jacob' }] },
         { name: 'age', selectedOptions: [{ value: 'twenty four', label: 'twenty four' }] },

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ReactSelect from 'react-select';
 import isEmpty from 'lodash.isempty';
 import * as constants from './constants';
+import Select from './filterTypes/Select';
 
 export default class Filter extends Component {
   static newSelectedFilter(filterName) {
@@ -75,11 +76,10 @@ export default class Filter extends Component {
 
   renderFilterTypeSelect(availableFilter, selectedFilter) {
     return (
-      <ReactSelect
+      <Select
         options={availableFilter.options}
-        value={selectedFilter.selectedOptions}
-        onChange={newOption => this.onChildChange(selectedFilter, newOption)}
-        isMulti
+        selectedOptions={selectedFilter.selectedOptions}
+        onChange={newOptions => this.onChildChange(selectedFilter, newOptions)}
       />
     );
   }
