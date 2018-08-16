@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactSelect from 'react-select';
 
-export default function Select({ options, selectedOptions, onChange }) {
+export default function Select({
+  options, selectedOptions, onChange, isMulti,
+}) {
   return (
     <ReactSelect
       options={options}
       value={selectedOptions}
       onChange={onChange}
-      isMulti
+      isMulti={isMulti}
     />
   );
 }
@@ -27,4 +29,5 @@ Select.propTypes = {
     }),
   ).isRequired,
   onChange: PropTypes.func.isRequired,
+  isMulti: PropTypes.bool.isRequired,
 };

@@ -98,4 +98,22 @@ describe('Filter', () => {
       ]);
     });
   });
+
+  describe('Select filter type', () => {
+    it('passes isMulti to child react-select, and defaults to false', () => {
+      const spy = createSpy();
+      const filter = shallow(<Filter
+        availableFilters={[
+          {
+            name: 'name', type: 'select', selectIsMulti: true, options: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }],
+          },
+          { name: 'age', type: 'select', options: [{ value: 'twenty four', label: 'twenty four' }] },
+        ]}
+        selectedFilters={[{ name: 'name', selectedOptions: [{ value: 'Emmett', label: 'Emmett' }] }, { name: 'age', selectedOptions: [] }]}
+        onChange={spy}
+      />);
+      expect(filter.find('#age').find(Select).props().isMulti).toBeFalsy();
+      expect(filter.find('#name').find(Select).props().isMulti).toBeTruthy();
+    });
+  });
 });

@@ -80,6 +80,7 @@ export default class Filter extends Component {
         options={availableFilter.options}
         selectedOptions={selectedFilter.selectedOptions}
         onChange={newOptions => this.onChildChange(selectedFilter, newOptions)}
+        isMulti={availableFilter.selectIsMulti}
       />
     );
   }
@@ -131,12 +132,12 @@ export default class Filter extends Component {
 Filter.propTypes = {
   availableFilters: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string,
-      type: PropTypes.oneOf(Object.values(constants.FILTER_TYPES)),
+      name: PropTypes.string.isRequired,
+      type: PropTypes.oneOf(Object.values(constants.FILTER_TYPES)).isRequired,
       options: PropTypes.arrayOf(
         PropTypes.shape({
-          value: PropTypes.string,
-          label: PropTypes.string,
+          value: PropTypes.string.isRequired,
+          label: PropTypes.string.isRequired,
         }),
       ),
       selectIsMulti: PropTypes.bool,
@@ -144,11 +145,11 @@ Filter.propTypes = {
   ).isRequired,
   selectedFilters: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string,
+      name: PropTypes.string.isRequired,
       selectedOptions: PropTypes.arrayOf(
         PropTypes.shape({
-          value: PropTypes.string,
-          label: PropTypes.string,
+          value: PropTypes.string.isRequired,
+          label: PropTypes.string.isRequired,
         }),
       ),
     }),

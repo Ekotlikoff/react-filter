@@ -17,7 +17,14 @@ class Demo extends Component {
   }
 
   render() {
-    const availableFilters = [{ name: 'name', type: 'select', options: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }] }];
+    const availableFilters = [
+      {
+        name: 'name', type: 'select', selectIsMulti: true, options: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }],
+      },
+      {
+        name: 'gender', type: 'select', options: [{ value: 'Male', label: 'Male' }, { value: 'Female', label: 'Female' }],
+      },
+    ];
     const { selectedFilters } = this.state;
 
     return (
