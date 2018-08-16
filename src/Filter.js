@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ReactSelect from 'react-select';
 import isEmpty from 'lodash.isempty';
 import * as constants from './constants';
+import { optionsType, selectedOptionsType } from './propTypeConstants';
 import Select from './filterTypes/Select';
 
 export default class Filter extends Component {
@@ -134,30 +135,14 @@ Filter.propTypes = {
     PropTypes.shape({
       name: PropTypes.string.isRequired,
       type: PropTypes.oneOf(Object.values(constants.FILTER_TYPES)).isRequired,
-      options: PropTypes.arrayOf(
-        PropTypes.shape({
-          value: PropTypes.string.isRequired,
-          label: PropTypes.string.isRequired,
-        }),
-      ),
+      options: optionsType.isRequired,
       selectIsMulti: PropTypes.bool,
     }),
   ).isRequired,
   selectedFilters: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-      selectedOptions: PropTypes.oneOfType([
-        PropTypes.arrayOf(
-          PropTypes.shape({
-            value: PropTypes.string,
-            label: PropTypes.string,
-          }),
-        ),
-        PropTypes.shape({
-          value: PropTypes.string,
-          label: PropTypes.string,
-        }),
-      ]),
+      selectedOptions: selectedOptionsType.isRequired,
     }),
   ).isRequired,
   onChange: PropTypes.func.isRequired,

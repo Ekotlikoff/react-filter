@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactSelect from 'react-select';
+import { optionsType, selectedOptionsType } from '../propTypeConstants';
 
 export default function Select({
   options, selectedOptions, onChange, isMulti,
@@ -21,24 +22,8 @@ Select.defaultProps = {
 };
 
 Select.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string,
-    }),
-  ).isRequired,
-  selectedOptions: PropTypes.oneOfType([
-    PropTypes.arrayOf(
-      PropTypes.shape({
-        value: PropTypes.string,
-        label: PropTypes.string,
-      }),
-    ),
-    PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string,
-    }),
-  ]),
+  options: optionsType.isRequired,
+  selectedOptions: selectedOptionsType,
   onChange: PropTypes.func.isRequired,
   isMulti: PropTypes.bool,
 };
