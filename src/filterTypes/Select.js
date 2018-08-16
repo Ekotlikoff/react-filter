@@ -15,6 +15,11 @@ export default function Select({
   );
 }
 
+Select.defaultProps = {
+  isMulti: false,
+  selectedOptions: [],
+};
+
 Select.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
@@ -22,12 +27,18 @@ Select.propTypes = {
       label: PropTypes.string,
     }),
   ).isRequired,
-  selectedOptions: PropTypes.arrayOf(
+  selectedOptions: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        value: PropTypes.string,
+        label: PropTypes.string,
+      }),
+    ),
     PropTypes.shape({
       value: PropTypes.string,
       label: PropTypes.string,
     }),
-  ).isRequired,
+  ]),
   onChange: PropTypes.func.isRequired,
-  isMulti: PropTypes.bool.isRequired,
+  isMulti: PropTypes.bool,
 };

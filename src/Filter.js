@@ -146,12 +146,18 @@ Filter.propTypes = {
   selectedFilters: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-      selectedOptions: PropTypes.arrayOf(
+      selectedOptions: PropTypes.oneOfType([
+        PropTypes.arrayOf(
+          PropTypes.shape({
+            value: PropTypes.string,
+            label: PropTypes.string,
+          }),
+        ),
         PropTypes.shape({
-          value: PropTypes.string.isRequired,
-          label: PropTypes.string.isRequired,
+          value: PropTypes.string,
+          label: PropTypes.string,
         }),
-      ),
+      ]),
     }),
   ).isRequired,
   onChange: PropTypes.func.isRequired,
