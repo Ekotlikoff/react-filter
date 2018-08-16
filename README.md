@@ -14,3 +14,12 @@ React component to facilitate the creation of a query across a dataset
 
 [coveralls-badge]: https://coveralls.io/repos/github/Ekotlikoff/react-filter/badge.svg?branch=master
 [coveralls]: https://coveralls.io/github/Ekotlikoff/react-filter?branch=master
+
+# Installation (coming soon)
+
+`npm install --save react-filter`
+`npm install bootstrap --save`
+
+Import Bootstrap CSS in the src/index.js file:
+
+`import 'bootstrap/dist/css/bootstrap.min.css';`

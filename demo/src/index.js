@@ -1,8 +1,10 @@
 /* eslint-env browser */
 import React, { Component } from 'react';
 import { render } from 'react-dom'; // eslint-disable-line import/no-extraneous-dependencies
+import { Container, Row, Col } from 'reactstrap'; // eslint-disable-line import/no-extraneous-dependencies
 
 import Filter from '../../src';
+import 'bootstrap/dist/css/bootstrap.css'; // eslint-disable-line import/no-extraneous-dependencies
 
 class Demo extends Component {
   constructor(props) {
@@ -28,16 +30,25 @@ class Demo extends Component {
     const { selectedFilters } = this.state;
 
     return (
-      <div>
-        <h1>
-          react-filter Demo
-        </h1>
-        <Filter
-          availableFilters={availableFilters}
-          selectedFilters={selectedFilters}
-          onChange={this.onChange}
-        />
-      </div>
+      <Container fluid>
+        <Row>
+          <Col sm="12">
+            <h1 style={{ 'text-align': 'center', 'vertical-align': 'middle' }}>
+              react-filter
+            </h1>
+          </Col>
+        </Row>
+        <Row noGutters>
+          <Col md={2}>
+            <Filter
+              availableFilters={availableFilters}
+              selectedFilters={selectedFilters}
+              onChange={this.onChange}
+            />
+          </Col>
+          <Col md={9} />
+        </Row>
+      </Container>
     );
   }
 }
