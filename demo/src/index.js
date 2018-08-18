@@ -33,7 +33,7 @@ class Demo extends Component {
       <Container fluid>
         <Row>
           <Col sm="12">
-            <h1 style={{ 'text-align': 'center', 'vertical-align': 'middle' }}>
+            <h1 style={{ textAlign: 'center', verticalAlign: 'middle' }}>
               react-filter
             </h1>
           </Col>
@@ -44,6 +44,9 @@ class Demo extends Component {
               availableFilters={availableFilters}
               selectedFilters={selectedFilters}
               onChange={this.onChange}
+              className="rootClassName"
+              classNamePrefix="inner"
+              isRtl
             />
           </Col>
           <Col md={9} />

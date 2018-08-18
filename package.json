@@ -20,6 +20,7 @@
     "test:watch": "nwb test-react --server"
   },
   "dependencies": {
+    "emotion": "^9.2.6",
     "lodash.isempty": "^4.4.0",
     "prop-types": "^15.6.2",
     "react-select": "^2.0.0",

@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactSelect from 'react-select';
 import isEmpty from 'lodash.isempty';
 import * as constants from './constants';
 import { optionsType, selectedOptionsType } from './propTypeConstants';
+import { FilterContainer } from './FilterContainer';
+import Input from './Input';
 import Select from './filterTypes/Select';
+import defaultStyles from './Styles';
+import classNames from './utils';
 
 export default class Filter extends Component {
   static newSelectedFilter(filterName) {
@@ -22,6 +25,7 @@ export default class Filter extends Component {
     this.getSelectedFilters = this.getSelectedFilters.bind(this);
     this.onRootChange = this.onRootChange.bind(this);
     this.onChildChange = this.onChildChange.bind(this);
+    this.getStyles = this.getStyles.bind(this);
   }
 
   onRootChange(allNewSelectedFilters) {
@@ -49,6 +53,28 @@ export default class Filter extends Component {
         { [selectedFilterIndex]: { ...selectedFilters[selectedFilterIndex], selectedOptions } },
       ),
     );
+  }
+
+  getCommonProps() {
+    const { getStyles, props } = this;
+    const { isRtl, classNamePrefix } = props;
+    const cxPrefix = classNamePrefix;
+
+    const cx = classNames.bind(null, cxPrefix);
+    return {
+      cx,
+      isRtl,
+      getStyles,
+      selectProps: props,
+    };
+  }
+
+  getStyles(key, props) {
+    const { styles } = this.props;
+    const defaultStyleForKey = defaultStyles[key](props);
+    defaultStyleForKey.boxSizing = 'border-box';
+    const custom = styles[key];
+    return custom ? custom(defaultStyleForKey, props) : defaultStyleForKey;
   }
 
   getUnselectedFilters() {
@@ -115,20 +141,31 @@ export default class Filter extends Component {
   }
 
   render() {
+    const { className, isDisabled } = this.props;
+    this.commonProps = this.getCommonProps();
+    const { commonProps } = this;
     return (
-      <div>
-        <ReactSelect
-          options={this.getUnselectedFilters()}
-          value={this.getSelectedFilters()}
+      <FilterContainer {...commonProps} className={className} isDisabled={isDisabled}>
+        <Input
+          {...commonProps}
+          isDisabled={isDisabled}
+          unselectedFilters={this.getUnselectedFilters()}
+          selectedFilters={this.getSelectedFilters()}
           onChange={this.onRootChange}
-          hideSelectedOptions
-          isMulti
         />
         {this.renderSelectedFilters()}
-      </div>
+      </FilterContainer>
     );
   }
 }
+
+Filter.defaultProps = {
+  className: null,
+  styles: {},
+  classNamePrefix: null,
+  isRtl: false,
+  isDisabled: false,
+};
 
 Filter.propTypes = {
   availableFilters: PropTypes.arrayOf(
@@ -146,4 +183,9 @@ Filter.propTypes = {
     }),
   ).isRequired,
   onChange: PropTypes.func.isRequired,
+  className: PropTypes.string,
+  classNamePrefix: PropTypes.string,
+  styles: PropTypes.objectOf(PropTypes.func),
+  isRtl: PropTypes.bool,
+  isDisabled: PropTypes.bool,
 };

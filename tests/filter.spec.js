@@ -116,4 +116,33 @@ describe('Filter', () => {
       expect(filter.find('#name').find(Select).props().isMulti).toBeTruthy();
     });
   });
+
+  describe('Styles', () => {
+    it('can incorporate custom styles', () => {
+      const propsWithCustomStyles = { styles: { input: base => ({ ...base, marginLeft: '10px' }) } };
+      const filter = shallow(<Filter {...propsWithCustomStyles} />);
+      const customStyles = filter.instance().getStyles('input', propsWithCustomStyles);
+      expect(customStyles.marginLeft).toEqual('10px');
+      expect(customStyles.marginBottom).toEqual('10px');
+    });
+
+    it('can override default styles', () => {
+      const propsWithCustomStyles = { styles: { input: () => ({ marginLeft: '10px' }) } };
+      const filter = shallow(<Filter {...propsWithCustomStyles} />);
+      const customStyles = filter.instance().getStyles('input', propsWithCustomStyles);
+      expect(customStyles.marginLeft).toEqual('10px');
+      expect(customStyles.marginBottom).toEqual(null);
+    });
+
+    it('can override default styles for multiple keys', () => {
+      const propsWithCustomStyles = { styles: { input: () => ({ marginLeft: '10px' }), container: base => ({ ...base, marginLeft: '10px' }) } };
+      const filter = shallow(<Filter {...propsWithCustomStyles} />);
+      const customStylesInput = filter.instance().getStyles('input', propsWithCustomStyles);
+      const customStylesContainer = filter.instance().getStyles('container', propsWithCustomStyles);
+      expect(customStylesInput.marginLeft).toEqual('10px');
+      expect(customStylesInput.marginBottom).toEqual(null);
+      expect(customStylesContainer.position).toEqual('relative');
+      expect(customStylesContainer.marginLeft).toEqual('10px');
+    });
+  });
 });
