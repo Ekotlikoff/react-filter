@@ -18,8 +18,3 @@ React component to facilitate the creation of a query across a dataset
 # Installation (coming soon)
 
 `npm install --save react-filter`
-`npm install bootstrap --save`
-
-Import Bootstrap CSS in the src/index.js file:
-
-`import 'bootstrap/dist/css/bootstrap.min.css';`
