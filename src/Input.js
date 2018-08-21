@@ -29,6 +29,7 @@ export default function Input(props) {
       value={selectedFilters}
       onChange={onChange}
       hideSelectedOptions
+      controlShouldRenderValue={false}
       isMulti
     />
   );

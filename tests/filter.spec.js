@@ -11,6 +11,61 @@ describe('Filter', () => {
     expect(render(<Filter />)).toContain('<div');
   });
 
+  describe('Required filter handling', () => {
+    const availableFiltersWithRequired = [
+      {
+        name: 'name', type: 'select', required: true, options: [],
+      },
+      {
+        name: 'hair color', type: 'select', required: true, options: [],
+      },
+      { name: 'gender', type: 'select', options: [] },
+    ];
+    it('calls onChange with statically provided required filters', () => {
+      const spy = createSpy();
+      shallow(<Filter onChange={spy} availableFilters={availableFiltersWithRequired} />);
+      expect(spy).toHaveBeenCalledWith(
+        [{ name: 'name', selectedOptions: [] }, { name: 'hair color', selectedOptions: [] }],
+      );
+    });
+
+    it('calls onChange with newly loaded required filters', () => {
+      const spy = createSpy();
+      const filter = shallow(<Filter onChange={spy} availableFilters={[]} />);
+      filter.setProps({ availableFilters: availableFiltersWithRequired });
+      expect(spy).toHaveBeenCalledWith(
+        [{ name: 'name', selectedOptions: [] }, { name: 'hair color', selectedOptions: [] }],
+      );
+    });
+
+    it('calls onChange with updated required filters', () => {
+      const spy = createSpy();
+      const filter = shallow(
+        <Filter onChange={spy} availableFilters={availableFiltersWithRequired} />,
+      );
+      expect(spy).toHaveBeenCalledWith(
+        [{ name: 'name', selectedOptions: [] }, { name: 'hair color', selectedOptions: [] }],
+      );
+      filter.setProps({ availableFilters: availableFiltersWithRequired.filter(f => f.name !== 'name') });
+      expect(spy).toHaveBeenCalledWith(
+        [{ name: 'hair color', selectedOptions: [] }],
+      );
+    });
+
+    it('does not call onChange when selectedFilters are updated', () => {
+      const spy = createSpy();
+      const filter = shallow(
+        <Filter
+          onChange={spy}
+          availableFilters={availableFiltersWithRequired.map(f => ({ ...f, required: false }))}
+        />,
+      );
+      expect(spy).toHaveBeenCalled();
+      filter.setProps({ selectedFilters: [{ name: 'name', selectedOptions: [] }] });
+      expect(spy.calls.length).toEqual(1);
+    });
+  });
+
   it('throws an error on unrecognized filter types', () => {
     expect(() => render(<Filter
       availableFilters={[{ name: 'name', type: 'unrecognized', options: [] }]}

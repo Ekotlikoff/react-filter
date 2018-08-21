@@ -22,6 +22,7 @@
   "dependencies": {
     "emotion": "^9.2.6",
     "lodash.isempty": "^4.4.0",
+    "lodash.isequal": "^4.5.0",
     "prop-types": "^15.6.2",
     "react-select": "^2.0.0",
     "reactstrap": "^6.3.1"

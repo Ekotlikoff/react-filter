@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash.isempty';
+import isEqual from 'lodash.isequal';
 import * as constants from './constants';
 import { optionsType, selectedOptionsType } from './propTypeConstants';
 import { FilterContainer } from './FilterContainer';
@@ -17,6 +18,7 @@ export default class Filter extends Component {
   constructor(props) {
     super(props);
 
+    this.state = { requiredFiltersInitialized: false };
     this.isFilterUnselected = this.isFilterUnselected.bind(this);
     this.renderSelectedFilters = this.renderSelectedFilters.bind(this);
     this.renderSelectedFilter = this.renderSelectedFilter.bind(this);
@@ -26,6 +28,26 @@ export default class Filter extends Component {
     this.onRootChange = this.onRootChange.bind(this);
     this.onChildChange = this.onChildChange.bind(this);
     this.getStyles = this.getStyles.bind(this);
+    this.initializeRequiredFilters = this.initializeRequiredFilters.bind(this);
+  }
+
+  componentDidMount() {
+    const { availableFilters } = this.props;
+    const { requiredFiltersInitialized } = this.state;
+    if (!isEmpty(availableFilters) && !requiredFiltersInitialized) {
+      this.initializeRequiredFilters(availableFilters);
+    }
+  }
+
+  componentWillReceiveProps({ availableFilters: nextAvailableFilters }) {
+    const { requiredFiltersInitialized } = this.state;
+    const { availableFilters } = this.props;
+    if (
+      (!isEmpty(nextAvailableFilters) && !requiredFiltersInitialized)
+      || (!isEqual(availableFilters, nextAvailableFilters))
+    ) {
+      this.initializeRequiredFilters(nextAvailableFilters);
+    }
   }
 
   onRootChange(allNewSelectedFilters) {
@@ -93,6 +115,15 @@ export default class Filter extends Component {
       return selectedFilters.map(({ name }) => ({ value: name, label: name }));
     }
     return [];
+  }
+
+  initializeRequiredFilters(availableFilters) {
+    const { onChange } = this.props;
+    const requiredFilters = availableFilters
+      .filter(f => f.required)
+      .map(f => Filter.newSelectedFilter(f.name));
+    this.setState({ requiredFiltersInitialized: true });
+    onChange(requiredFilters);
   }
 
   isFilterUnselected(filterName) {
@@ -174,6 +205,7 @@ Filter.propTypes = {
       type: PropTypes.oneOf(Object.values(constants.FILTER_TYPES)).isRequired,
       options: optionsType.isRequired,
       selectIsMulti: PropTypes.bool,
+      required: PropTypes.bool,
     }),
   ).isRequired,
   selectedFilters: PropTypes.arrayOf(
