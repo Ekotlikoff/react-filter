@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import isEmpty from 'lodash.isempty';
 import isEqual from 'lodash.isequal';
 import * as constants from './constants';
-import { optionsType, selectedOptionsType } from './propTypeConstants';
-import { FilterContainer } from './FilterContainer';
+import { optionsType, selectedOptionsType, filterTypesPropType } from './propTypeConstants';
+import { FilterRootContainer } from './FilterRootContainer';
+import FilterContainer from './filterTypes/FilterContainer';
 import Input from './Input';
 import Select from './filterTypes/Select';
 import defaultStyles from './Styles';
 import classNames from './utils';
 
-export default class Filter extends Component {
+export default class FilterRoot extends Component {
   static newSelectedFilter(filterName) {
     return { name: filterName, selectedOptions: [] };
   }
@@ -60,7 +61,7 @@ export default class Filter extends Component {
     onChange(
       [
         ...prevSelectedFilters,
-        ...newSelectedFilterNames.map(name => Filter.newSelectedFilter(name)),
+        ...newSelectedFilterNames.map(name => FilterRoot.newSelectedFilter(name)),
       ],
     );
   }
@@ -121,7 +122,7 @@ export default class Filter extends Component {
     const { onChange } = this.props;
     const requiredFilters = availableFilters
       .filter(f => f.required)
-      .map(f => Filter.newSelectedFilter(f.name));
+      .map(f => FilterRoot.newSelectedFilter(f.name));
     this.setState({ requiredFiltersInitialized: true });
     onChange(requiredFilters);
   }
@@ -144,17 +145,21 @@ export default class Filter extends Component {
   }
 
   renderSelectedFilters() {
-    const { selectedFilters } = this.props;
+    const { selectedFilters, availableFilters } = this.props;
     if (isEmpty(selectedFilters)) {
       return null;
     }
     return (
       <div>
-        {selectedFilters.map(selectedFilter => (
-          <div key={selectedFilter.name} id={selectedFilter.name}>
-            {this.renderSelectedFilter(selectedFilter)}
-          </div>
-        ))}
+        {selectedFilters.map((selectedFilter) => {
+          const availableFilter = availableFilters
+            .find(filter => filter.name === selectedFilter.name);
+          return (
+            <FilterContainer filterName={selectedFilter.name} required={availableFilter.required}>
+              {this.renderSelectedFilter(selectedFilter)}
+            </FilterContainer>
+          );
+        })}
       </div>
     );
   }
@@ -176,7 +181,7 @@ export default class Filter extends Component {
     this.commonProps = this.getCommonProps();
     const { commonProps } = this;
     return (
-      <FilterContainer {...commonProps} className={className} isDisabled={isDisabled}>
+      <FilterRootContainer {...commonProps} className={className} isDisabled={isDisabled}>
         <Input
           {...commonProps}
           isDisabled={isDisabled}
@@ -185,12 +190,12 @@ export default class Filter extends Component {
           onChange={this.onRootChange}
         />
         {this.renderSelectedFilters()}
-      </FilterContainer>
+      </FilterRootContainer>
     );
   }
 }
 
-Filter.defaultProps = {
+FilterRoot.defaultProps = {
   className: null,
   styles: {},
   classNamePrefix: null,
@@ -198,11 +203,11 @@ Filter.defaultProps = {
   isDisabled: false,
 };
 
-Filter.propTypes = {
+FilterRoot.propTypes = {
   availableFilters: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-      type: PropTypes.oneOf(Object.values(constants.FILTER_TYPES)).isRequired,
+      type: filterTypesPropType.isRequired,
       options: optionsType.isRequired,
       selectIsMulti: PropTypes.bool,
       required: PropTypes.bool,

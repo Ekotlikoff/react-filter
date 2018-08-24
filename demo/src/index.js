@@ -5,7 +5,7 @@ import {
   Container, Row, Col, Button,
 } from 'reactstrap'; // eslint-disable-line import/no-extraneous-dependencies
 
-import Filter from '../../src';
+import Filter from '../../src/FilterRoot';
 import 'bootstrap/dist/css/bootstrap.css'; // eslint-disable-line import/no-extraneous-dependencies
 
 class Demo extends Component {

@@ -8,7 +8,7 @@ export const containerCSS = ({ isDisabled, isRtl }) => ({
   position: 'relative',
 });
 
-export const FilterContainer = (props) => {
+export const FilterRootContainer = (props) => {
   const {
     children, className, cx, getStyles, isDisabled, isRtl,
   } = props;
@@ -28,11 +28,11 @@ export const FilterContainer = (props) => {
   );
 };
 
-FilterContainer.defaultProps = {
+FilterRootContainer.defaultProps = {
   className: null,
 };
 
-FilterContainer.propTypes = {
+FilterRootContainer.propTypes = {
   children: PropTypes.node.isRequired,
   cx: PropTypes.func.isRequired,
   getStyles: PropTypes.func.isRequired,

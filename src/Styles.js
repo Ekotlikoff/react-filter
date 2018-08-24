@@ -1,4 +1,4 @@
-import { containerCSS } from './FilterContainer';
+import { containerCSS } from './FilterRootContainer';
 import { inputCSS } from './Input';
 
 export default {

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import * as constants from './constants';
 
 const option = PropTypes.shape({
   value: PropTypes.string,
@@ -15,3 +16,5 @@ export const selectedOptionsType = PropTypes.oneOfType([
   ),
   option,
 ]);
+
+export const filterTypesPropType = PropTypes.oneOf(Object.values(constants.FILTER_TYPES));

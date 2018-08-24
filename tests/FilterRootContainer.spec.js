@@ -1,18 +1,18 @@
 import React from 'react'; // eslint-disable-line import/no-extraneous-dependencies
 import expect from 'expect'; // eslint-disable-line import/no-extraneous-dependencies
 import { shallow } from 'enzyme'; // eslint-disable-line import/no-extraneous-dependencies
-import { containerCSS, FilterContainer } from '../src/FilterContainer';
+import { containerCSS, FilterRootContainer } from '../src/FilterRootContainer';
 import classNames from '../src/utils';
 
-describe('FilterContainer', () => {
+describe('FilterRootContainer', () => {
   it('uses className prop', () => {
-    const filterContainer = shallow(<FilterContainer className="container-class" getStyles={() => {}} cx={classNames.bind(null, '')} />); // eslint-disable-line react/jsx-no-bind
-    expect(filterContainer.hasClass('container-class')).toEqual(true);
+    const FilterContainer = shallow(<FilterRootContainer className="container-class" getStyles={() => {}} cx={classNames.bind(null, '')} />); // eslint-disable-line react/jsx-no-bind
+    expect(FilterContainer.hasClass('container-class')).toEqual(true);
   });
 
   it('uses cx prop to include inner classnames', () => {
-    const filterContainer = shallow(<FilterContainer isDisabled className="container-class" getStyles={() => {}} cx={classNames.bind(null, 'inner')} />); // eslint-disable-line react/jsx-no-bind
-    expect(filterContainer.hasClass('inner--is-disabled')).toEqual(true);
+    const FilterContainer = shallow(<FilterRootContainer isDisabled className="container-class" getStyles={() => {}} cx={classNames.bind(null, 'inner')} />); // eslint-disable-line react/jsx-no-bind
+    expect(FilterContainer.hasClass('inner--is-disabled')).toEqual(true);
   });
 
   it('uses isRtl prop', () => {

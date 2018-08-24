@@ -3,7 +3,7 @@ import React from 'react';
 import { renderToStaticMarkup as render } from 'react-dom/server';
 import { shallow } from 'enzyme';
 
-import Filter from '../src/Filter';
+import Filter from '../src/FilterRoot';
 import Select from '../src/filterTypes/Select';
 
 describe('Filter', () => {

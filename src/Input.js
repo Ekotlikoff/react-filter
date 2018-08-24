@@ -30,6 +30,7 @@ export default function Input(props) {
       onChange={onChange}
       hideSelectedOptions
       controlShouldRenderValue={false}
+      isClearable={false}
       isMulti
     />
   );
