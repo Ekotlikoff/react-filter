@@ -8,7 +8,6 @@ export const inputCSS = ({ isDisabled, isRtl }) => ({
   direction: isRtl ? 'rtl' : null,
   pointerEvents: isDisabled ? 'none' : null, // cancel mouse events when disabled
   position: 'relative',
-  marginBottom: '10px',
 });
 
 export default function Input(props) {

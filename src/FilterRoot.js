@@ -197,15 +197,17 @@ export default class FilterRoot extends Component {
     const { className, isDisabled } = this.props;
     this.commonProps = this.getCommonProps();
     const { commonProps } = this;
+    const selectedFilters = this.getSelectedFilters();
     return (
       <FilterRootContainer {...commonProps} className={className} isDisabled={isDisabled}>
         <Input
           {...commonProps}
           isDisabled={isDisabled}
           unselectedFilters={this.getUnselectedFilters()}
-          selectedFilters={this.getSelectedFilters()}
+          selectedFilters={selectedFilters}
           onChange={this.onRootChange}
         />
+        {!isEmpty(selectedFilters) && <hr />}
         {this.renderSelectedFilters()}
       </FilterRootContainer>
     );
