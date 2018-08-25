@@ -49,7 +49,9 @@ class Demo extends Component {
         </Row>
         <Row noGutters>
           <Col md={2}>
-            Static filter
+            <strong>
+              Static filter
+            </strong>
             <Filter
               availableFilters={availableFilters}
               selectedFilters={selectedFiltersStatic}
@@ -59,14 +61,16 @@ class Demo extends Component {
               isRtl
             />
             <br />
-            Loaded filter
+            <strong>
+              Loaded filter
+            </strong>
             <Filter
               availableFilters={availableFiltersLoaded}
               selectedFilters={selectedFiltersLoaded}
               onChange={this.onChangeLoaded}
               className="rootClassName"
               classNamePrefix="inner"
-              isRtl
+              isRtl={false}
             />
             <br />
             <Button onClick={() => this.setState({ availableFiltersLoaded: availableFilters })}>

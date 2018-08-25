@@ -11,6 +11,12 @@ describe('Filter', () => {
     expect(render(<Filter />)).toContain('<div');
   });
 
+  it('throws error if missing onChange', () => {
+    const availableFilters = [{ name: 'gender', type: 'select', options: [] }];
+    const filter = shallow(<Filter />);
+    expect(() => filter.instance().initializeRequiredFilters(availableFilters)).toThrow(/No onChange provided/);
+  });
+
   describe('Required filter handling', () => {
     const availableFiltersWithRequired = [
       {
@@ -23,10 +29,13 @@ describe('Filter', () => {
     ];
     it('calls onChange with statically provided required filters', () => {
       const spy = createSpy();
-      shallow(<Filter onChange={spy} availableFilters={availableFiltersWithRequired} />);
+      const filter = shallow(
+        <Filter onChange={spy} availableFilters={availableFiltersWithRequired} />,
+      );
       expect(spy).toHaveBeenCalledWith(
         [{ name: 'name', selectedOptions: [] }, { name: 'hair color', selectedOptions: [] }],
       );
+      expect(filter.state().requiredFiltersInitialized).toEqual(true);
     });
 
     it('calls onChange with newly loaded required filters', () => {
@@ -74,38 +83,12 @@ describe('Filter', () => {
   });
 
   it('renders filter type: select', () => {
-    expect(render(<Filter
+    const filter = shallow(<Filter
       availableFilters={[{ name: 'name', type: 'select', options: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }] }]}
       selectedFilters={[{ name: 'name', selectedOptions: [] }]}
-    />)).toContain('<div id="name"');
-  });
-
-  describe('Selected filter behavior', () => {
-    it('adds newly selected filters', () => {
-      const spy = createSpy();
-      const filter = shallow(<Filter
-        availableFilters={[{ name: 'name', type: 'select', options: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }] }]}
-        selectedFilters={[]}
-        onChange={spy}
-      />);
-      filter.instance().onRootChange([{ value: 'name' }]);
-      expect(spy).toHaveBeenCalledWith([{ name: 'name', selectedOptions: [] }]);
-    });
-
-    it('removes deselected filters and maintains state of previously selected filter\'s options', () => {
-      const spy = createSpy();
-      const filter = shallow(<Filter
-        availableFilters={[
-          { name: 'name', type: 'select', options: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }] },
-          { name: 'age', type: 'select', options: [{ value: 'twenty four', label: 'twenty four' }] },
-          { name: 'gender', type: 'select', options: [{ value: 'male', label: 'male' }] },
-        ]}
-        selectedFilters={[{ name: 'name', selectedOptions: [{ value: 'Emmett', label: 'Emmett' }] }, { name: 'age', selectedOptions: [] }, { name: 'gender', selectedOptions: [] }]}
-        onChange={spy}
-      />);
-      filter.instance().onRootChange([{ value: 'name' }, { value: 'age' }]);
-      expect(spy).toHaveBeenCalledWith([{ name: 'name', selectedOptions: [{ value: 'Emmett', label: 'Emmett' }] }, { name: 'age', selectedOptions: [] }]);
-    });
+      onChange={() => {}}
+    />);
+    expect(filter.find('#name').exists()).toEqual(true);
   });
 
   describe('Selected options behavior', () => {

@@ -30,6 +30,7 @@ export default class FilterRoot extends Component {
     this.onChildChange = this.onChildChange.bind(this);
     this.getStyles = this.getStyles.bind(this);
     this.initializeRequiredFilters = this.initializeRequiredFilters.bind(this);
+    this.deselectFilter = this.deselectFilter.bind(this);
   }
 
   componentDidMount() {
@@ -118,13 +119,22 @@ export default class FilterRoot extends Component {
     return [];
   }
 
+  deselectFilter(filterName) {
+    const { onChange, selectedFilters } = this.props;
+    onChange(selectedFilters.filter(filter => filter.name !== filterName));
+  }
+
   initializeRequiredFilters(availableFilters) {
     const { onChange } = this.props;
     const requiredFilters = availableFilters
       .filter(f => f.required)
       .map(f => FilterRoot.newSelectedFilter(f.name));
     this.setState({ requiredFiltersInitialized: true });
-    onChange(requiredFilters);
+    if (onChange) {
+      onChange(requiredFilters);
+    } else {
+      throw new Error('Filter.js: No onChange provided.');
+    }
   }
 
   isFilterUnselected(filterName) {
@@ -155,7 +165,14 @@ export default class FilterRoot extends Component {
           const availableFilter = availableFilters
             .find(filter => filter.name === selectedFilter.name);
           return (
-            <FilterContainer filterName={selectedFilter.name} required={availableFilter.required}>
+            <FilterContainer
+              {...this.commonProps}
+              id={selectedFilter.name}
+              key={selectedFilter.name}
+              filterName={selectedFilter.name}
+              required={availableFilter.required}
+              onDeselect={() => this.deselectFilter(selectedFilter.name)}
+            >
               {this.renderSelectedFilter(selectedFilter)}
             </FilterContainer>
           );
