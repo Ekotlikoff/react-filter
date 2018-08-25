@@ -161,7 +161,7 @@ describe('Filter', () => {
       const filter = shallow(<Filter {...propsWithCustomStyles} />);
       const customStyles = filter.instance().getStyles('input', propsWithCustomStyles);
       expect(customStyles.marginLeft).toEqual('10px');
-      expect(customStyles.marginBottom).toEqual('10px');
+      expect(customStyles.position).toEqual('relative');
     });
 
     it('can override default styles', () => {
@@ -169,7 +169,7 @@ describe('Filter', () => {
       const filter = shallow(<Filter {...propsWithCustomStyles} />);
       const customStyles = filter.instance().getStyles('input', propsWithCustomStyles);
       expect(customStyles.marginLeft).toEqual('10px');
-      expect(customStyles.marginBottom).toEqual(null);
+      expect(customStyles.position).toEqual(null);
     });
 
     it('can override default styles for multiple keys', () => {
@@ -178,7 +178,6 @@ describe('Filter', () => {
       const customStylesInput = filter.instance().getStyles('input', propsWithCustomStyles);
       const customStylesContainer = filter.instance().getStyles('container', propsWithCustomStyles);
       expect(customStylesInput.marginLeft).toEqual('10px');
-      expect(customStylesInput.marginBottom).toEqual(null);
       expect(customStylesContainer.position).toEqual('relative');
       expect(customStylesContainer.marginLeft).toEqual('10px');
     });
