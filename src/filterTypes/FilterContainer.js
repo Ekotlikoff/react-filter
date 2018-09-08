@@ -7,12 +7,16 @@ import { FILTER_TYPES } from '../constants';
 
 const removeButtonCSS = ({ isRtl }) => ({
   direction: isRtl ? 'rtl' : null,
+  position: 'relative',
+  display: 'inline',
   cursor: 'pointer',
-  height: '24px',
-  'font-size': '13px',
+  height: '20px',
+  padding: 0,
   float: 'right',
-  color: '#F75E5E',
+  color: 'red',
+  background: 'none',
   border: 'none',
+  'text-decoration': 'none',
 });
 
 export const RemoveButton = (props) => {
