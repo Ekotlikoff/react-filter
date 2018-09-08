@@ -18,3 +18,17 @@ export const selectedOptionsType = PropTypes.oneOfType([
 ]);
 
 export const filterTypesPropType = PropTypes.oneOf(Object.values(constants.FILTER_TYPES));
+
+export const availableFilterType = PropTypes.shape({
+  name: PropTypes.string.isRequired,
+  type: filterTypesPropType.isRequired,
+  options: optionsType.isRequired,
+  selectIsMulti: PropTypes.bool,
+  showSummary: PropTypes.bool,
+  required: PropTypes.bool,
+});
+
+export const selectedFilterType = PropTypes.shape({
+  name: PropTypes.string.isRequired,
+  selectedOptions: selectedOptionsType.isRequired,
+});

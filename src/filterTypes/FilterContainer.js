@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
+import { SelectSummary } from './Select';
+import { availableFilterType, selectedFilterType } from '../propTypeConstants';
+import { FILTER_TYPES } from '../constants';
 
 const removeButtonCSS = ({ isRtl }) => ({
   direction: isRtl ? 'rtl' : null,
@@ -40,6 +43,17 @@ RemoveButton.propTypes = {
   isRtl: PropTypes.bool.isRequired,
 };
 
+const renderSummary = (props) => {
+  switch (props.availableFilter.type) {
+    case (FILTER_TYPES.SELECT):
+      return (
+        <SelectSummary {...props} />
+      );
+    default:
+      return null;
+  }
+};
+
 export const titleContainerCSS = ({ isRtl }) => ({
   direction: isRtl ? 'rtl' : null,
   position: 'relative',
@@ -52,7 +66,7 @@ const requiredAsterixCSS = () => ({
 
 export const Title = (props) => {
   const {
-    filterName, required, cx, getStyles, isRtl,
+    availableFilter, filterName, required, showAllSummaries, cx, getStyles, isRtl,
   } = props;
   const requiredAsterix = required && (
     <span className={cx(
@@ -65,6 +79,7 @@ export const Title = (props) => {
       *
     </span>
   );
+  const shouldShowSummary = availableFilter.showSummary || showAllSummaries;
   return (
     <div
       className={cx(
@@ -78,13 +93,17 @@ export const Title = (props) => {
       { ' ' }
       {requiredAsterix}
       {!required && <RemoveButton {...props} />}
+      {shouldShowSummary && renderSummary(props)}
     </div>
   );
 };
 
 Title.propTypes = {
   filterName: PropTypes.string.isRequired,
+  availableFilter: availableFilterType.isRequired,
+  selectedFilter: selectedFilterType.isRequired,
   required: PropTypes.bool.isRequired,
+  showAllSummaries: PropTypes.bool.isRequired,
   cx: PropTypes.func.isRequired,
   getStyles: PropTypes.func.isRequired,
   isRtl: PropTypes.bool.isRequired,
@@ -119,8 +138,11 @@ FilterContainer.defaultProps = {
 };
 
 FilterContainer.propTypes = {
+  availableFilter: availableFilterType.isRequired,
+  selectedFilter: selectedFilterType.isRequired,
   filterName: PropTypes.string.isRequired,
   onDeselect: PropTypes.func.isRequired,
+  showAllSummaries: PropTypes.bool.isRequired,
   required: PropTypes.bool,
   children: PropTypes.node.isRequired,
   cx: PropTypes.func.isRequired,

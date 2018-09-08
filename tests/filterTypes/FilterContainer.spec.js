@@ -3,19 +3,23 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import Filter from '../../src/FilterRoot';
+import { SelectSummary } from '../../src/filterTypes/Select';
 import FilterContainer, {
   Title, RemoveButton, filterContainerCSS, titleContainerCSS,
 } from '../../src/filterTypes/FilterContainer';
 import classNames from '../../src/utils';
+import { FILTER_TYPES } from '../../src/constants';
 
 describe('FilterContainer', () => {
+  const commonProps = {
+    filterName: 'name',
+    availableFilter: { },
+    onDeselect: () => {},
+    getStyles: () => {},
+    cx: () => {},
+  };
   it('contains Title', () => {
-    const filterContainer = shallow(<FilterContainer
-      filterName="name"
-      onDeselect={() => {}}
-      getStyles={() => {}}
-      cx={() => {}}
-    />);
+    const filterContainer = shallow(<FilterContainer {...commonProps} />);
     expect(filterContainer.find(Title).exists()).toEqual(true);
   });
 
@@ -26,12 +30,7 @@ describe('FilterContainer', () => {
 
   describe('Title', () => {
     it('displays remove button for non-required filters', () => {
-      const title = shallow(<Title
-        filterName="name"
-        onDeselect={() => {}}
-        getStyles={() => {}}
-        cx={() => {}}
-      />);
+      const title = shallow(<Title {...commonProps} />);
       expect(title.find(RemoveButton).exists()).toEqual(true);
     });
 
@@ -41,34 +40,64 @@ describe('FilterContainer', () => {
     });
 
     it('uses isRtl', () => {
-      const title = shallow(<Title
-        filterName="name"
-        isRtl
-        onDeselect={() => {}}
-        getStyles={() => {}}
-        cx={classNames.bind(null, 'title')} // eslint-disable-line react/jsx-no-bind
-      />);
+      const title = shallow(<Title {...commonProps} isRtl cx={classNames.bind(null, 'title')} />); // eslint-disable-line react/jsx-no-bind
       expect(title.hasClass('title--is-rtl')).toEqual(true);
     });
 
     it('does not display remove button for required filters', () => {
-      const title = shallow(<Title
-        filterName="name"
-        required
-        onDeselect={() => {}}
-        getStyles={() => {}}
-        cx={() => {}}
-      />);
+      const title = shallow(<Title {...commonProps} required />);
       expect(title.find(RemoveButton).exists()).toEqual(false);
+    });
+
+    describe('Should show summary', () => {
+      it('does not display summary without a filter type', () => {
+        const title = shallow(<Title {...commonProps} showAllSummaries />);
+        expect(title.find(SelectSummary).exists()).toEqual(false);
+      });
+
+      it('does not display summary without showSummary/showAllSummaries', () => {
+        const title = shallow(
+          <Title {...commonProps} availableFilter={{ type: FILTER_TYPES.SELECT }} />,
+        );
+        expect(title.find(SelectSummary).exists()).toEqual(false);
+      });
+
+      it('does display summary with showSummary and without showAllSummaries', () => {
+        const title = shallow(
+          <Title
+            {...commonProps}
+            availableFilter={{ type: FILTER_TYPES.SELECT, showSummary: true }}
+          />,
+        );
+        expect(title.find(SelectSummary).exists()).toEqual(true);
+      });
+
+      it('does display summary without showSummary and with showAllSummaries', () => {
+        const title = shallow(
+          <Title
+            {...commonProps}
+            availableFilter={{ type: FILTER_TYPES.SELECT }}
+            showAllSummaries
+          />,
+        );
+        expect(title.find(SelectSummary).exists()).toEqual(true);
+      });
+
+      it('does display summary with showSummary and with showAllSummaries', () => {
+        const title = shallow(
+          <Title
+            {...commonProps}
+            availableFilter={{ type: FILTER_TYPES.SELECT, showSummary: true }}
+            showAllSummaries
+          />,
+        );
+        expect(title.find(SelectSummary).exists()).toEqual(true);
+      });
     });
   });
   describe('RemoveButton', () => {
     it('has type button', () => {
-      const removeButton = shallow(<RemoveButton
-        filterName="name"
-        onDeselect={() => {}}
-        cx={() => {}}
-      />);
+      const removeButton = shallow(<RemoveButton {...commonProps} />);
       expect(removeButton.props().type).toEqual('button');
     });
 

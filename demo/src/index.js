@@ -30,7 +30,10 @@ class Demo extends Component {
   render() {
     const availableFilters = [
       {
-        name: 'name', type: 'select', selectIsMulti: true, required: true, options: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }],
+        name: 'birth place', type: 'select', showSummary: true, options: [{ value: 'NY', label: 'NY' }, { value: 'NJ', label: 'NJ' }],
+      },
+      {
+        name: 'name', type: 'select', selectIsMulti: true, showSummary: true, required: true, options: [{ value: 'Emmett', label: 'Emmett' }, { value: 'Jacob', label: 'Jacob' }],
       },
       {
         name: 'gender', type: 'select', options: [{ value: 'Male', label: 'Male' }, { value: 'Female', label: 'Female' }],
@@ -71,6 +74,7 @@ class Demo extends Component {
               className="rootClassName"
               classNamePrefix="inner"
               isRtl={false}
+              showAllSummaries={false}
             />
             <br />
             <Button onClick={() => this.setState({ availableFiltersLoaded: availableFilters })}>

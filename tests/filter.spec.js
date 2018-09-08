@@ -178,6 +178,7 @@ describe('Filter', () => {
       const customStylesInput = filter.instance().getStyles('input', propsWithCustomStyles);
       const customStylesContainer = filter.instance().getStyles('container', propsWithCustomStyles);
       expect(customStylesInput.marginLeft).toEqual('10px');
+      expect(customStylesInput.marginBottom).toEqual(null);
       expect(customStylesContainer.position).toEqual('relative');
       expect(customStylesContainer.marginLeft).toEqual('10px');
     });

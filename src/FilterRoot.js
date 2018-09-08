@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import isEmpty from 'lodash.isempty';
 import isEqual from 'lodash.isequal';
 import * as constants from './constants';
-import { optionsType, selectedOptionsType, filterTypesPropType } from './propTypeConstants';
+import { availableFilterType, selectedFilterType } from './propTypeConstants';
 import { FilterRootContainer } from './FilterRootContainer';
 import FilterContainer from './filterTypes/FilterContainer';
 import Input from './Input';
@@ -150,12 +150,13 @@ export default class FilterRoot extends Component {
         selectedOptions={selectedFilter.selectedOptions}
         onChange={newOptions => this.onChildChange(selectedFilter, newOptions)}
         isMulti={availableFilter.selectIsMulti}
+        {...this.commonProps}
       />
     );
   }
 
   renderSelectedFilters() {
-    const { selectedFilters, availableFilters } = this.props;
+    const { selectedFilters, availableFilters, showAllSummaries } = this.props;
     if (isEmpty(selectedFilters)) {
       return null;
     }
@@ -170,10 +171,13 @@ export default class FilterRoot extends Component {
               id={selectedFilter.name}
               key={selectedFilter.name}
               filterName={selectedFilter.name}
+              selectedFilter={selectedFilter}
+              availableFilter={availableFilter}
               required={availableFilter.required}
+              showAllSummaries={showAllSummaries}
               onDeselect={() => this.deselectFilter(selectedFilter.name)}
             >
-              {this.renderSelectedFilter(selectedFilter)}
+              {this.renderSelectedFilter(availableFilter, selectedFilter)}
             </FilterContainer>
           );
         })}
@@ -181,10 +185,7 @@ export default class FilterRoot extends Component {
     );
   }
 
-  renderSelectedFilter(selectedFilter) {
-    const { availableFilters } = this.props;
-    const availableFilter = availableFilters
-      .find(filter => filter.name === selectedFilter.name);
+  renderSelectedFilter(availableFilter, selectedFilter) {
     switch (availableFilter.type) {
       case (constants.FILTER_TYPES.SELECT):
         return this.renderFilterTypeSelect(availableFilter, selectedFilter);
@@ -215,6 +216,7 @@ export default class FilterRoot extends Component {
 }
 
 FilterRoot.defaultProps = {
+  showAllSummaries: true,
   className: null,
   styles: {},
   classNamePrefix: null,
@@ -224,21 +226,13 @@ FilterRoot.defaultProps = {
 
 FilterRoot.propTypes = {
   availableFilters: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      type: filterTypesPropType.isRequired,
-      options: optionsType.isRequired,
-      selectIsMulti: PropTypes.bool,
-      required: PropTypes.bool,
-    }),
+    availableFilterType,
   ).isRequired,
   selectedFilters: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      selectedOptions: selectedOptionsType.isRequired,
-    }),
+    selectedFilterType,
   ).isRequired,
   onChange: PropTypes.func.isRequired,
+  showAllSummaries: PropTypes.bool,
   className: PropTypes.string,
   classNamePrefix: PropTypes.string,
   styles: PropTypes.objectOf(PropTypes.func),
